@@ -1,0 +1,77 @@
+//file to control floors in the VGA
+
+module  floor ( input         Clk,                // 50 MHz clock
+                             Reset,              // Active-high reset signal
+                             frame_clk,          // The clock indicating a new frame (~60Hz)
+               input [9:0]   DrawX, DrawY,       // Current pixel coordinates	
+					output [9:0]   floor_x[4],
+					output [9:0]   floor_y[4]
+
+              );
+				  
+
+	 parameter [9:0] floor_step = 1;
+    parameter [9:0] floor_y_min=0;       // Topmost floor on the Y axis
+    parameter [9:0] floor_y_max=479;     // Bottommost floor on the Y axis
+    parameter [9:0] floor_x_size=80;  //floor size parameter
+    parameter [9:0] floor_y_size=10;
+	 
+	 logic [9:0] floor_x_pos[4];
+	 logic [9:0] floor_y_pos[4];
+	 logic [9:0] floor_x_pos_in[4];
+	 logic [9:0] floor_y_pos_in[4];
+
+    logic frame_clk_delayed;
+    logic frame_clk_rising_edge;
+    always_ff @ (posedge Clk) begin
+        frame_clk_delayed <= frame_clk;
+    end
+    assign frame_clk_rising_edge = (frame_clk == 1'b1) && (frame_clk_delayed == 1'b0);	 
+	 
+	 always_ff @ (posedge Clk)
+    begin
+			if (Reset)
+				begin
+					floor_x_pos[0] <= 160;
+					floor_x_pos[1] <= 480;
+					floor_x_pos[2] <= 140;
+					floor_x_pos[3] <= 500;
+					floor_y_pos[0] <= 120;
+					floor_y_pos[1] <= 200;
+					floor_y_pos[2] <= 300;
+					floor_y_pos[3] <= 350;
+				end
+			else if (frame_clk_rising_edge)        // Update only at rising edge of frame clock
+				begin
+					floor_x_pos <= floor_x_pos_in;
+					floor_y_pos <= floor_y_pos_in;
+				end
+				//default keep register value
+	 end
+	 
+	 always_comb
+	 begin
+			floor_y_pos_in[0] = floor_y_pos[0] - floor_step;
+			floor_y_pos_in[1] = floor_y_pos[1] - floor_step;
+			floor_y_pos_in[2] = floor_y_pos[2] - floor_step;
+			floor_y_pos_in[3] = floor_y_pos[3] - floor_step;
+			
+			floor_x_pos_in = floor_x_pos;
+			
+			//check if floor meets bottom
+			if(floor_y_pos[0] <= floor_y_min)
+				floor_y_pos_in[0] = floor_y_max - floor_y_size;
+			if(floor_y_pos[1] <= floor_y_min)
+				floor_y_pos_in[1] = floor_y_max - floor_y_size;
+			if(floor_y_pos[2] <= floor_y_min)
+				floor_y_pos_in[2] = floor_y_max - floor_y_size;
+			if(floor_y_pos[3] <= floor_y_min)
+				floor_y_pos_in[3] = floor_y_max - floor_y_size;
+			
+		//pass parameter to output	
+			floor_x = floor_x_pos;
+			floor_y = floor_y_pos;
+			
+	 end
+
+endmodule

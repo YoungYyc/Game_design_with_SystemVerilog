@@ -1,0 +1,4 @@
+module score_keeper (input   CLK,
+							output	score0, score1, score2, score3, score4);
+	
+	always_comb

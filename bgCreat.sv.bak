@@ -1,0 +1,9 @@
+///////////module to draw the background///////
+
+module bgCreat(
+		input CLK;
+		input DrawX;
+		input DrawY;
+		output [18:0] bg_read_address
+
+)

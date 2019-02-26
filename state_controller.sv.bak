@@ -1,0 +1,7 @@
+////////////////state controller///////////////
+
+module state_controller (input   Clk,
+								input   Reset,
+								input   game_enter,
+								input   game_exit,
+								output	[2:0] game_state);

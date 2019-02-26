@@ -1,0 +1,16 @@
+module top_ver ([15:0] LDATA, [15:0] RDATA, INIT, INIT_FINISH, adc_full, data_over, AUD_MCLK, AUD_BCLK, AUD_ADCDAT, AUD_DACDAT, AUD_DACLRCK, AUD_ADCLRCK, I2C_SDAT, I2C_SCLK, ADCDATA);
+	 	logic [15:0] LDATA, RDATA;
+		logic  INIT;
+		logic	INIT_FINISH;
+		logic	adc_full;
+		logic	data_over;
+		logic	AUD_MCLK;
+		logic	AUD_BCLK;
+		logic	AUD_ADCDAT;
+		logic	AUD_DACDAT;
+		logic	AUD_DACLRCK, AUD_ADCLRCK;
+		logic	I2C_SDAT;
+		logic	I2C_SCLK;
+		logic	ADCDATA;
+bottom_vhdl u1 (.a(q), .b(p), .c(out));
+endmodule
